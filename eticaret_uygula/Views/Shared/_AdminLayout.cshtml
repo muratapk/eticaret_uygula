@@ -55,9 +55,23 @@
             <div class="sidebar-heading">
                 Interface
             </div>
+            <li class="nav-item">
+                <a class="nav-link" href="/Categories/Index">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Kategoriler</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/Products/Index">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Ürünler</span>
+                </a>
+            </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
+
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
@@ -367,7 +381,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+                   @RenderBody()
 
                 </div>
                 <!-- /.container-fluid -->
@@ -423,7 +437,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/Admin/js/sb-admin-2.min.js"></script>
-
+    @RenderSection("Scripts", required: false)
 </body>
 
 </html>

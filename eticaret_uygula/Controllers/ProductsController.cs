@@ -48,7 +48,8 @@ namespace eticaret_uygula.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
+            //ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
+            ViewBag.kateliste = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             return View();
         }
 
@@ -57,15 +58,30 @@ namespace eticaret_uygula.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductCode,ProductDescription,ProductPicture,ProductPrice,CategoryId")] Products products)
+        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductCode,ProductDescription,ProductPicture,ProductPrice,CategoryId")] Products products,IFormFile ImageUpload)
         {
+            if (ImageUpload != null)
+            {
+                var uzanti = Path.GetExtension(ImageUpload.FileName);
+                //bocek.png  .png domates.jpg  .jpg
+                string yeniisim = Guid.NewGuid().ToString() + uzanti;
+
+                string yol = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Urunler/" + yeniisim);
+                using (var stream = new FileStream(yol, FileMode.Create))
+                {
+                    ImageUpload.CopyToAsync(stream);
+                }
+                products.ProductPicture = yeniisim;
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(products);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", products.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", products.CategoryId);
+            //ViewBag.kateliste = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             return View(products);
         }
 
@@ -82,7 +98,8 @@ namespace eticaret_uygula.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", products.CategoryId);
+            // ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", products.CategoryId);
+            ViewBag.kateliste = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             return View(products);
         }
 
@@ -91,8 +108,24 @@ namespace eticaret_uygula.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductCode,ProductDescription,ProductPicture,ProductPrice,CategoryId")] Products products)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductCode,ProductDescription,ProductPicture,ProductPrice,CategoryId")] Products products, IFormFile ImageUpload)
         {
+
+
+            if (ImageUpload != null)
+            {
+                var uzanti = Path.GetExtension(ImageUpload.FileName);
+                //bocek.png  .png domates.jpg  .jpg
+                string yeniisim = Guid.NewGuid().ToString() + uzanti;
+
+                string yol = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Urunler/" + yeniisim);
+                using (var stream = new FileStream(yol, FileMode.Create))
+                {
+                    ImageUpload.CopyToAsync(stream);
+                }
+                products.ProductPicture = yeniisim;
+            }
+
             if (id != products.ProductId)
             {
                 return NotFound();
@@ -151,11 +184,20 @@ namespace eticaret_uygula.Controllers
                 return Problem("Entity set 'ApplicationDbContext.Products'  is null.");
             }
             var products = await _context.Products.FindAsync(id);
+
             if (products != null)
             {
                 _context.Products.Remove(products);
             }
-            
+            //Dosya silme
+            string yol = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Urunler/" + products.ProductPicture);
+            FileInfo yolFile = new FileInfo(yol);
+            if(yolFile.Exists)
+            {
+                System.IO.File.Delete(yolFile.FullName);
+                yolFile.Delete();
+            }
+            //Dosya Silme
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

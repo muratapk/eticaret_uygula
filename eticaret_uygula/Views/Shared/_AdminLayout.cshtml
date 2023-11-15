@@ -68,6 +68,12 @@
                     <span>Ürünler</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Sliders/Index">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Slider</span>
+                </a>
+            </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -437,7 +443,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/Admin/js/sb-admin-2.min.js"></script>
-    @RenderSection("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>

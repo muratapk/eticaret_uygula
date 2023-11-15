@@ -56,8 +56,23 @@ namespace eticaret_uygula.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SliderId,SliderName,Heeader1,Heeader2,Context,SliderImage")] slider slider)
+        public async Task<IActionResult> Create([Bind("SliderId,SliderName,Heeader1,Heeader2,Context,SliderImage")] slider slider,IFormFile ImageUpload)
         {
+            if (ImageUpload != null)
+            {
+                var uzanti = Path.GetExtension(ImageUpload.FileName);
+                //bocek.png  .png domates.jpg  .jpg
+                string yeniisim = Guid.NewGuid().ToString() + uzanti;
+
+                string yol = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Slider/" + yeniisim);
+                using (var stream = new FileStream(yol, FileMode.Create))
+                {
+                    ImageUpload.CopyToAsync(stream);
+                }
+                slider.SliderImage= yeniisim;
+            }
+
+
             if (ModelState.IsValid)
             {
                 _context.Add(slider);
@@ -88,8 +103,24 @@ namespace eticaret_uygula.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SliderId,SliderName,Heeader1,Heeader2,Context,SliderImage")] slider slider)
+        public async Task<IActionResult> Edit(int id, [Bind("SliderId,SliderName,Heeader1,Heeader2,Context,SliderImage")] slider slider,IFormFile ImageUpload)
         {
+
+
+            if (ImageUpload != null)
+            {
+                var uzanti = Path.GetExtension(ImageUpload.FileName);
+                //bocek.png  .png domates.jpg  .jpg
+                string yeniisim = Guid.NewGuid().ToString() + uzanti;
+
+                string yol = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Slider/" + yeniisim);
+                using (var stream = new FileStream(yol, FileMode.Create))
+                {
+                    ImageUpload.CopyToAsync(stream);
+                }
+                slider.SliderImage = yeniisim;
+            }
+
             if (id != slider.SliderId)
             {
                 return NotFound();
@@ -150,7 +181,17 @@ namespace eticaret_uygula.Controllers
             {
                 _context.Slider.Remove(slider);
             }
-            
+            //Dosya silme
+            string yol = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/Slider/" + slider.SliderImage);
+            FileInfo yolFile = new FileInfo(yol);
+            if (yolFile.Exists)
+            {
+                System.IO.File.Delete(yolFile.FullName);
+                yolFile.Delete();
+            }
+            //Dosya Silme
+
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -48,6 +48,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SliderImage)
+                <img src="/Slider/@item.SliderImage" height="100px" width="100px"/>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.SliderId">Edit</a> |

@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Slider\" />
     <Folder Include="wwwroot\Urunler\" />
   </ItemGroup>
 

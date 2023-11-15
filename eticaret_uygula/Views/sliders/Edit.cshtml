@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="SliderId" />
             <div class="form-group">
@@ -36,8 +36,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="SliderImage" class="control-label"></label>
-                <input asp-for="SliderImage" class="form-control" />
-                <span asp-validation-for="SliderImage" class="text-danger"></span>
+                <input asp-for="ImageUpload" class="form-control" />
+                <span asp-validation-for="ImageUpload" class="text-danger"></span>
+                <img src="/Slider/@Model.SliderImage" height="150px" width="150px"/>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

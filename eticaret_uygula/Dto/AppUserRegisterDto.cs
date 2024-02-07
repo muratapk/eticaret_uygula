@@ -4,8 +4,8 @@ namespace eticaret_uygula.Dto
 {
     public class AppUserRegisterDto
     {
-        [Display(Name ="Adınız")]
-        [Required(ErrorMessage ="Adınızı Boş Geçemezsiniz")]
+        [Display(Name = "Adınız")]
+        [Required(ErrorMessage = "Adınızı Boş Geçemezsiniz")]
         public string FirstName { get; set; }
         [Display(Name = "Soyadınız Girin")]
         [Required(ErrorMessage = "Soyadınızı Boş Geçemezsiniz")]
@@ -26,4 +26,5 @@ namespace eticaret_uygula.Dto
         [Required(ErrorMessage = "Şifrenizi Boş Geçemezsiniz")]
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
+    }
 }

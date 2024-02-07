@@ -51,6 +51,7 @@ namespace eticaret_uygula.Controllers
                 client.Authenticate("muratciplak917@gmail.com", "ayvs pnsr jumg cdqa");
                 client.Send(mimeMessage);
                 client.Disconnect(true);
+
                 TempData["Mail"] = appUserRegisterDto.Email;
                 return RedirectToAction("Confirmation");
 

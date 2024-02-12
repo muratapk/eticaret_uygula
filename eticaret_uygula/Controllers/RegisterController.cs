@@ -32,7 +32,8 @@ namespace eticaret_uygula.Controllers
                 LastName = appUserRegisterDto.LastName, 
                 City = appUserRegisterDto.City,
                 UserName = appUserRegisterDto.UserName,
-                Email = appUserRegisterDto.Email,   
+                Email = appUserRegisterDto.Email,  
+                ConfirmCode = code,
             };
             var result=await _userManager.CreateAsync(appuser,appUserRegisterDto.Password);
             if(result.Succeeded)
@@ -43,7 +44,7 @@ namespace eticaret_uygula.Controllers
                 mimeMessage.From.Add(mailboxAdressFrom);
                 mimeMessage.To.Add(mailboxAddressTo);
                 BodyBuilder bodyBuilder = new BodyBuilder();
-                bodyBuilder.TextBody = "Kaydınız Başarılı Şekilde Gerçekleşti";
+                bodyBuilder.TextBody = "Kaydınız Başarılı Şekilde Gerçekleşti"+code;
                 mimeMessage.Body=bodyBuilder.ToMessageBody();
                 mimeMessage.Subject = "ETicaret Uygulaması";
                 SmtpClient client = new SmtpClient();
@@ -53,7 +54,7 @@ namespace eticaret_uygula.Controllers
                 client.Disconnect(true);
 
                 TempData["Mail"] = appUserRegisterDto.Email;
-                return RedirectToAction("Confirmation");
+                return RedirectToAction("Index","ConfirmMail");
 
             }
             else

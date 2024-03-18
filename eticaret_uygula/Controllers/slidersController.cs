@@ -191,7 +191,7 @@ namespace eticaret_uygula.Controllers
             }
             //Dosya Silme
 
-
+            _context.Remove(slider);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
